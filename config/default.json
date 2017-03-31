@@ -1,0 +1,5 @@
+{
+  "rabbit": {
+    "url": "amqp://localhost"
+  }
+}

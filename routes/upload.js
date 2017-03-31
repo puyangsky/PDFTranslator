@@ -1,7 +1,9 @@
 var express = require('express');
 var fs = require('fs');
+
+var mq = require('../lib/mq');
+
 var multer  = require('multer');
-//var upload = multer({ dest: 'uploads/' });
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')
@@ -58,9 +60,10 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/*', function(req, res, next) {
-	var from = req.params[0];
-	console.log(from);
-	res.send(from);
+	var param = req.params[0];
+	console.log(param);
+    mq.push(param);
+	res.send(param);
 	//console.log(req.body)
 	//res.send('GET function');
 });
