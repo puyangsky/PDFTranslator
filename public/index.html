@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Express 学习</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script> -->
+		<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+		<style>
+			body{
+				background:#EED8AE;
+			}
+			#container{
+				//text-align:center;
+				//color:#EE3A8C;
+			}
+			.div1{
+				position:relative;
+				margin-left:40%;
+				display:inline;
+			}
+			.sub{
+				margin:20px;
+			}
+			.mydiv{
+				position:relative;
+				margin:50px;
+				padding-top: 20px;
+			}
+			.div0{
+				position:absolute;
+				left:25%;
+				right:25%;
+				top:10%;
+			}
+			.div3{
+				text-align:center;
+			}
+
+			.div2{
+				margin-top: 20px;
+				margin-right: 20px;
+				padding: 20px;
+				text-align:right;
+			}
+			.div4{
+				text-align:center;
+				padding: 20px;
+				/*margin-right: 120px;*/
+			}
+			.myspan{
+				font-weight: bold;
+			}
+			.div5{
+				text-align:center;
+				color: red;
+				/*display: none;*/
+			}
+		</style>
+	</head>
+	<body id="container">
+		<div class="div0">
+			<div class="div3">
+				<h1>PDF自动翻译</h1>
+				<p>Welcome to Express</p>
+			</div>
+			<div class="mydiv">
+				<form class="form-group" enctype="multipart/form-data">
+					<div class="div2">
+						<span class="col-lg-6 myspan">
+							PDF文件输入
+						</span>
+						<div class="col-lg-6">
+							<input id="file" type="file">
+						</div>	
+					</div>
+
+					<div class="div4">
+						<input id="sub" class="btn btn-primary btn-sm" type="button" value="上传"/>
+					</div>
+				</form>
+				<p id="#status" class="div5"></p>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function(){
+			  $("#sub").click(function(){
+			  	var f = $("#file").val();
+
+			  	if(f.slice(f.length-4,f.length) != ".pdf") {
+			  		alert("请上传PDF格式的文件！");
+			  		return;
+			  	}
+			  	//console.log(f);
+			  	var f1 = $('#file')[0].files[0];
+			  	//console.log(typeof f1);
+			  	var formData = new FormData();
+			  	formData.append('path', f);
+				formData.append('pdf', f1); 
+				$.ajaxSettings.crossDomain = true;
+			  	$.ajax({
+			  		url:"/upload",
+			  		type:"POST",
+				  	processData: false,
+    				contentType: false,
+    				cache: false,
+			   	  	data:formData,
+			   	  	dataType:"text",
+			   	  	success:function(result){
+        				//$("#div5").html(result);
+        				//location.href='/upload';
+        				console.log("上传" + result + "成功！");
+        				alert("上传" + result + "成功！");
+        				// $("#div5").css("display", "block");
+        				$("#status").html("上传成功，等待解析中···");
+    				},
+    				error:function(XMLHttpRequest, textStatus, errorThrown) {
+						alert(XMLHttpRequest.status + XMLHttpRequest.readyStat + textStatus);
+    				}
+				});
+			  });
+			});
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+

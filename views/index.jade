@@ -1,0 +1,62 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title Express 学习
+		link(rel='stylesheet',type='text/css',href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css')
+		script(src='https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js')
+		script(src='https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js')
+		style.
+			body{
+				background:#EED8AE;
+			}
+			#container{
+				//text-align:center;
+				//color:#EE3A8C;
+			}
+			.div1{
+				align:center;
+				position:relative;
+				margin-left:40%;
+				//margin-right:60%;
+			}
+			.sub{
+				margin:20px;
+			}
+			.mydiv{
+				position:relative;
+				//text-align:center;
+				margin:50px;
+				border:1px solid #F00;
+			}
+			.div0{
+				position:absolute;
+				left:25%;
+				right:25%;
+				top:20%;
+				text-align:center;
+				border:1px solid #F00;
+			}
+			.mylabel{
+				//text-align:left:
+			}
+	body#container
+		//	
+		//ol.breadcrumb.div1
+		//	li
+		//		a(href='/users') Home
+		//	li
+		//		a(href='/') 2017
+		//	li 十一月
+		div.div0
+			block content
+				h1= title
+				p Welcome to #{title}	
+				div.mydiv
+					form.form-group(action='/upload')
+						PDF文件输入
+						input.div1(type='file')
+						input.sub.btn.btn-primary.btn-sm(type='submit',value='提交')
+
+
+
