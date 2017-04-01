@@ -4,18 +4,18 @@
 var amqp = require('amqplib/callback_api');
 var config = require('config');
 var url = config.get('rabbit.url');
+var queue = config.get('rabbit.queue');
 
 console.log("connect to " + url);
 
-function push(data) {
+function push(msg) {
     amqp.connect(url, function (err, conn) {       //  创建连接
         conn.createChannel(function (err, ch) {
-            var q = 'default';
-            // var msg = 'Hello World!';
 
-            ch.assertQueue(q, {durable: false});
-            ch.sendToQueue(q, new Buffer(data));    //   发送消息
-            console.log("Send message:", data);
+            ch.assertQueue(queue, {durable: false});
+
+            ch.sendToQueue(queue, new Buffer(msg));    //   发送消息
+            console.log("Send message:", msg);
         });
         setTimeout(function () {
             conn.close();
@@ -24,16 +24,16 @@ function push(data) {
     });
 }
 
-
-function get() {
+function get(res) {
     var amqp = require('amqplib/callback_api');
-
+    var ret;
     amqp.connect(url, function(err, conn) {     //  创建连接
         conn.createChannel(function(err, ch) {
-            var q = 'test';
-            ch.assertQueue(q, {durable: false});
-            ch.consume(q, function(msg) {           //  接收消息
+            ch.assertQueue(queue, {durable: false});
+            ch.consume(queue, function(msg) {           //  接收消息
                 console.log("get Message", msg.content.toString());
+                ret = msg.content.toString();
+                res.send(ret);
             }, {noAck: true});
         });
     });
@@ -42,6 +42,4 @@ function get() {
 //导出接口
 exports.push=push;
 exports.get=get;
-
-// get();
 

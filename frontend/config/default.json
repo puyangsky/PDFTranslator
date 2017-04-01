@@ -1,0 +1,6 @@
+{
+  "rabbit": {
+    "url": "amqp://localhost",
+    "queue": "default"
+  }
+}

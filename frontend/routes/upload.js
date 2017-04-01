@@ -3,6 +3,7 @@ var fs = require('fs');
 
 var mq = require('../lib/mq');
 
+//解决上传文件的问题
 var multer  = require('multer');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -13,7 +14,7 @@ var storage = multer.diskStorage({
   }
 });
 
-var upload = multer({ storage: storage }).single('pdf')
+var upload = multer({ storage: storage }).single('pdf');
 var router = express.Router();
 
 
@@ -25,11 +26,13 @@ router.post('/', function(req, res, next) {
 		}
 		try{
 			var file = req.file;
-			if(file == null) 
+			if(file == null)
 				res.send('Blank file');
 			else{
-				console.log(req.ip + " at " + Date.now() + " uploads " + file.originalname
-					+ ", size: " + file.size + "B");
+				var msg = req.ip + " at " + Date.now() + " uploads " + file.originalname
+                    + ", size: " + file.size + "B";
+				console.log(msg);
+				mq.push(msg);
 				console.log(file.originalname);
 				res.type('html');
 				res.set('Content-Type', 'text/plain');
@@ -59,13 +62,14 @@ router.post('/', function(req, res, next) {
 	});
 });
 
-router.get('/*', function(req, res, next) {
-	var param = req.params[0];
-	console.log(param);
-    mq.push(param);
-	res.send(param);
-	//console.log(req.body)
-	//res.send('GET function');
+router.get('/get', function (req, res, next) {
+    var msg = 'fuck u at ' + Date.now();
+    mq.push(msg);
+    res.send(msg);
+});
+
+router.get('/', function(req, res, next) {
+	mq.get(res);
 });
 
 module.exports = router;

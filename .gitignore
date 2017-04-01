@@ -1,5 +1,14 @@
 node_modules/*
 .DS_Store
 .idea/*
-uploads/*
-npm-debug.log
+frontend/node_modules/*
+frontend/.DS_Store
+frontend/idea/*
+frontend/uploads/*
+frontend/npm-debug.log
+backend/mvnw*
+backend/out/*
+backend/*iml
+backend/target/*
+backend/.idea/*
+
