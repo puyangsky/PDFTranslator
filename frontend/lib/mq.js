@@ -14,7 +14,8 @@ function push(msg) {
 
             ch.assertQueue(queue, {durable: false});
 
-            ch.sendToQueue(queue, new Buffer(msg));    //   发送消息
+            // ch.sendToQueue(queue, new Buffer(msg));    //   发送消息
+            ch.sendToQueue(queue, new Buffer(msg, "utf-8"));    //   发送消息
             console.log("Send message:", msg);
         });
         setTimeout(function () {
@@ -33,7 +34,7 @@ function get(res) {
             ch.consume(queue, function(msg) {           //  接收消息
                 console.log("get Message", msg.content.toString());
                 ret = msg.content.toString();
-                res.send(ret);
+                // res.send(ret);
             }, {noAck: true});
         });
     });

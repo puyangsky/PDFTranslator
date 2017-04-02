@@ -14,10 +14,17 @@ public class ParserTest extends BaseTest {
     @Autowired
     private ParserService parserService;
 
-
     @Test
     public void parse() {
         String filepath = "/Users/imac/Desktop/1.pdf";
-        System.out.println(parserService.parse(filepath));
+        String trans = parserService.parse(filepath);
+        System.out.println("trans = " + trans);
+        System.out.println("length:" + trans.length());
+//        parserService.translate(filepath);
+    }
+
+    @Test
+    public void translate() {
+        parserService.translate("hello, fuck u");
     }
 }

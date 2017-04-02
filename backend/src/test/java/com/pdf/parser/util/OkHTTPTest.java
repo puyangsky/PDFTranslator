@@ -21,4 +21,10 @@ public class OkHTTPTest extends BaseTest {
         System.out.println(query);
         System.out.println(OkHttpUtil.get(url + query));
     }
+
+    @Test
+    public void test1() {
+        String a = "abc";
+        System.out.println(a.substring(0,3));
+    }
 }

@@ -11,4 +11,4 @@ backend/out/*
 backend/*iml
 backend/target/*
 backend/.idea/*
-
+uploads/*

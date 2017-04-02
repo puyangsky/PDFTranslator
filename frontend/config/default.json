@@ -2,5 +2,9 @@
   "rabbit": {
     "url": "amqp://localhost",
     "queue": "default"
+  },
+  "upload": {
+    // 保存上传文件的路径
+    "path": "/Users/imac/NodeProject/myapp/myapp/uploads/"
   }
 }

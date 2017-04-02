@@ -1,13 +1,15 @@
 var express = require('express');
-var fs = require('fs');
-
+// var fs = require('fs');
 var mq = require('../lib/mq');
+//通过读取配置文件的方式配置文件保存路径
+var config = require('config');
+var path = config.get('upload.path');
 
 //解决上传文件的问题
 var multer  = require('multer');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, path)
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + '.pdf')
@@ -29,14 +31,15 @@ router.post('/', function(req, res, next) {
 			if(file == null)
 				res.send('Blank file');
 			else{
-				var msg = req.ip + " at " + Date.now() + " uploads " + file.originalname
-                    + ", size: " + file.size + "B";
+				var msg = req.ip + " at " + Date.now() + " uploads " + file.originalname + " to " + file.path
+                    + ", size: " + file.size + " B";
 				console.log(msg);
-				mq.push(msg);
-				console.log(file.originalname);
+				var path = file.path;
+				mq.push(path);
+				// console.log(file.originalname);
 				res.type('html');
 				res.set('Content-Type', 'text/plain');
-				res.status(200).send(file.originalname);
+				res.status(200).send(msg);
 				// var ajaxTest={
 				//     tips:"you are not alone"
 				// };
