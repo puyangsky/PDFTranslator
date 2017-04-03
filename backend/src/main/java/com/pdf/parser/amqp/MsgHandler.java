@@ -37,7 +37,7 @@ public class MsgHandler {
     }
 
     private String decode(String msg) {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         if(StringUtils.isEmpty(msg))
             return "";
         String[] charArray = msg.split(",");
@@ -48,9 +48,9 @@ public class MsgHandler {
             sb.append(c);
         }
 
-        System.out.println(sb.toString());
-        long end = System.currentTimeMillis() - start;
-        System.out.println("time: " + end);
+//        System.out.println(sb.toString());
+//        long end = System.currentTimeMillis() - start;
+//        System.out.println("time: " + end);
         return sb.toString();
     }
 
