@@ -5,35 +5,69 @@
 		<title>PDF Auto Translator</title>
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<!-- <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script> -->
-		<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+		<script src="javascripts/jquery-1.9.1.min.js"></script>
+		<script src="javascripts/sockjs-0.3.js"></script>
+		<script src="javascripts/stomp.js"></script>
 		<style>
 			body{
 				background:#EED8AE;
 			}
 			#container{
-				//text-align:center;
-				//color:#EE3A8C;
+				/*text-align:center;*/
+				/*color:#EE3A8C;*/
 			}
 			.div1{
-				position:relative;
-				margin-left:40%;
-				display:inline;
+				height: 500px;
+				width: 1000px;
+				/*text-align: center;*/
+				/*使得div1中的两个div并排居中的关键*/
+				margin: 50px auto 0 auto;
+				/*border: solid 1px red;*/
+				padding: 10px;
 			}
 			.sub{
 				margin:20px;
 			}
 			.mydiv{
-				position:relative;
-				margin:50px;
-				padding-top: 20px;
+				float:left;
+				/*margin:50px;*/
+				/*padding-top: 20px;*/
+				width: 350px;
+				margin: 25px 20px 0 20px;
+				border: solid 1px black;
+				-moz-border-radius: 4px;
+				border-radius: 4px;
+				height: 150px;
+				overflow: auto;
+			}
+
+			.mydiv1 {
+				float:left;
+				margin: 0 20px 0 60px;
+				width: 500px;
+				height: 300px;
+				overflow: auto;
+				/*border: solid 1px black;*/
+				/*圆形边角*/
+				/*-moz-border-radius: 4px;*/
+				/*border-radius: 4px;*/
+			}
+			.mydiv2 {
+				float:left;
+				margin: 0 20px 0 0;
+				width: 450px;
+				height: 250px;
+				overflow: auto;
+				border: solid 1px black;
+				/*圆形边角*/
+				-moz-border-radius: 4px;
+				border-radius: 4px;
 			}
 			.div0{
-				position:absolute;
-				left:25%;
-				right:25%;
-				top:10%;
+				margin-top: 10%;
+				/*border: solid 1px black;*/
 			}
-			.div3{
+			.title{
 				text-align:center;
 			}
 
@@ -54,71 +88,120 @@
 			.div5{
 				text-align:center;
 				color: red;
-				/*display: none;*/
+				display: none;
 			}
 		</style>
 	</head>
 	<body id="container">
 		<div class="div0">
-			<div class="div3">
+			<div class="title">
 				<h1>PDF自动翻译</h1>
-				<p>Welcome to Express</p>
+				<p>Welcome to PDF Translator</p>
 			</div>
-			<div class="mydiv">
-				<form class="form-group" enctype="multipart/form-data">
-					<div class="div2">
-						<span class="col-lg-6 myspan">
-							PDF文件输入
-						</span>
-						<div class="col-lg-6">
-							<input id="file" type="file">
-						</div>	
-					</div>
+			<div class="div1">
+				<div class="mydiv">
+					<form class="form-group" enctype="multipart/form-data">
+						<div class="div2">
+							<span class="col-xs-6 myspan">
+								PDF文件输入：
+							</span>
+							<div class="col-xs-6">
+								<input id="file" type="file">
+							</div>
+						</div>
 
-					<div class="div4">
-						<input id="sub" class="btn btn-primary btn-sm" type="button" value="上传"/>
+						<div class="div4">
+							<input id="sub" class="btn btn-primary btn-sm" type="button" value="上传"/>
+						</div>
+					</form>
+					<div id="status" class="div5">
+
 					</div>
-				</form>
-				<p id="#status" class="div5"></p>
+				</div>
+
+
+				<div class="mydiv1">
+					<label>翻译结果：</label>
+					<div class="mydiv2">
+						<p id="result"></p>
+					</div>
+				</div>
 			</div>
+
 		</div>
 		<script type="text/javascript">
 			$(document).ready(function(){
-			  $("#sub").click(function(){
-			  	var f = $("#file").val();
+				$("#sub").click(function(){
+				var f = $("#file").val();
 
-			  	if(f.slice(f.length-4,f.length) != ".pdf") {
-			  		alert("请上传PDF格式的文件！");
-			  		return;
-			  	}
-			  	//console.log(f);
-			  	var f1 = $('#file')[0].files[0];
-			  	//console.log(typeof f1);
-			  	var formData = new FormData();
-			  	formData.append('path', f);
-				formData.append('pdf', f1); 
+				if(f.slice(f.length-4,f.length) != ".pdf") {
+					alert("请上传PDF格式的文件！");
+					return;
+				}
+				var f1 = $('#file')[0].files[0];
+				var formData = new FormData();
+				formData.append('path', f);
+				formData.append('pdf', f1);
 				$.ajaxSettings.crossDomain = true;
-			  	$.ajax({
-			  		url:"/upload",
-			  		type:"POST",
-				  	processData: false,
-    				contentType: false,
-    				cache: false,
-			   	  	data:formData,
-			   	  	dataType:"text",
-			   	  	success:function(result){
-        				//$("#div5").html(result);
-        				//location.href='/upload';
-        				console.log("上传" + result + "成功！");
-        				alert(result);
-        				// $("#div5").css("display", "block");
-        				$("#status").html("上传成功，等待解析中···");
-    				},
-    				error:function(XMLHttpRequest, textStatus, errorThrown) {
+				$.ajax({
+					url:"/upload",
+					type:"POST",
+					processData: false,
+					contentType: false,
+					cache: false,
+					data:formData,
+					dataType:"text",
+					success:function(result){
+						//$("#div5").html(result);
+						//location.href='/upload';
+						console.log("上传" + result + "成功！");
+//						alert(result);
+						$("#status").css('display', 'block');
+					},
+					error:function(XMLHttpRequest, textStatus, errorThrown) {
 						alert(XMLHttpRequest.status + XMLHttpRequest.readyStat + textStatus);
-    				}
+					}
 				});
-			  });
+				});
+				var updateGUI = function (elName, data) {
+					var p = $(elName);
+					if (data) {
+                        p.append("<code>" + data + "</code><br>");
+                    }
+                };
+                // Stomp.js boilerplate
+                if (location.search == '?ws') {
+                    var ws = new WebSocket('ws://localhost:15674/ws');
+                } else {
+                    var ws = new SockJS('http://localhost:15674/stomp');
+                }
+
+                // Init Client
+                var client = Stomp.over(ws);
+                console.log(">>>连接上http://localhost:15674");
+
+                // SockJS does not support heart-beat: disable heart-beats
+                client.heartbeat.outgoing = 0;
+                client.heartbeat.incoming = 0;
+//                client.debug = pipe('#second');
+
+                // Declare on_connect
+                var on_connect = function(x) {
+                    //data.body是接收到的数据
+                    client.subscribe("/queue/default", function(data) {
+                        var msg = data.body;
+//                        alert("收到数据：" + msg);
+                        updateGUI("#result", msg);
+                    });
+                };
+
+                // Declare on_error
+                var on_error =  function() {
+                    console.log('error');
+                };
+
+                // Conect to RabbitMQ
+                client.connect('guest', 'guest', on_connect, on_error, '/');
 			});
 		</script>
 	</body>
